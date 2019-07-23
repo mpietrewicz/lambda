@@ -12,7 +12,16 @@ public class TestCopy {
     public static void main(String[] args) throws IOException {
         File source = new File("source.txt");
         File target = new File("target.txt");
-        System.out.println(BeforeRefactor.fileCopyTime(source, target, new copyImplementation()));
+        System.out.println(BeforeRefactor.fileCopyTime(source, target, new copyInterface() {
+            @Override
+            public void copy(File source, File target) throws IOException {
+                try (FileInputStream in = new FileInputStream(source);
+                     FileOutputStream out = new FileOutputStream(target)) { int anotherByte;
+                    while ((anotherByte = in.read()) != -1) {
+                        out.write(anotherByte); }
+                }
+            }
+        }));
 
     }
 
@@ -39,19 +48,6 @@ class BeforeRefactor {
 
 interface copyInterface {
     void copy(File source, File target) throws IOException;
-}
-
-class copyImplementation implements copyInterface {
-
-    @Override
-    public void copy(File source, File target) throws IOException {
-        try (FileInputStream in = new FileInputStream(source);
-             FileOutputStream out = new FileOutputStream(target)) { int anotherByte;
-            while ((anotherByte = in.read()) != -1) {
-                out.write(anotherByte); }
-        }
-    }
-
 }
 
 
