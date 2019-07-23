@@ -1,25 +1,20 @@
-package workshop.java.lambda.refactorexercise;
+package workshop.java.lambda.refactorexercise.test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class TestCopy {
 
     public static void main(String[] args) throws IOException {
         File source = new File("source.txt");
         File target = new File("target.txt");
-        System.out.println(BeforeRefactor.fileCopyTime(source, target, new copyInterface() {
-            @Override
-            public void copy(File source, File target) throws IOException {
-                try (FileInputStream in = new FileInputStream(source);
-                     FileOutputStream out = new FileOutputStream(target)) { int anotherByte;
-                    while ((anotherByte = in.read()) != -1) {
-                        out.write(anotherByte); }
-                }
+        System.out.println(AfterRefactor.fileCopyTime(source, target, (s, t) -> {
+            try (FileInputStream in = new FileInputStream(s);
+                 FileOutputStream out = new FileOutputStream(t)) { int anotherByte;
+                while ((anotherByte = in.read()) != -1) {
+                    out.write(anotherByte); }
             }
         }));
 
@@ -28,7 +23,7 @@ public class TestCopy {
 }
 
 
-class BeforeRefactor {
+class AfterRefactor {
     public static double fileCopyTime(File source, File target, copyInterface copyInterface)
             throws IOException {
         long start = System.nanoTime();
