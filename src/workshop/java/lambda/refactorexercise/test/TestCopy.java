@@ -10,13 +10,15 @@ public class TestCopy {
     public static void main(String[] args) throws IOException {
         File source = new File("source.txt");
         File target = new File("target.txt");
-        System.out.println(AfterRefactor.fileCopyTime(source, target, (s, t) -> {
-            try (FileInputStream in = new FileInputStream(s);
-                 FileOutputStream out = new FileOutputStream(t)) { int anotherByte;
-                while ((anotherByte = in.read()) != -1) {
-                    out.write(anotherByte); }
-            }
-        }));
+        AfterRefactor.fileCopyTime(source, null, "start test", (src, str, i) -> {
+
+            System.out.println(source);
+            System.out.println(str);
+            System.out.println(target);
+            System.out.println(str);
+            System.out.println(i);
+
+        });
 
     }
 
@@ -24,10 +26,10 @@ public class TestCopy {
 
 
 class AfterRefactor {
-    public static double fileCopyTime(File source, File target, copyInterface copyInterface)
+    public static double fileCopyTime(File source, File target, String startText, newCopyInterface newCopyInterface)
             throws IOException {
         long start = System.nanoTime();
-        copyInterface.copy(source, target);
+        newCopyInterface.copy(source, startText, 1);
         long stop = System.nanoTime();
         return (stop - start) / 1e6; // czas w ms
     }
@@ -45,6 +47,9 @@ interface copyInterface {
     void copy(File source, File target) throws IOException;
 }
 
+interface newCopyInterface {
+    void copy(File source, String startText, int index);
+}
 
 /*
     TODO 2 zamiast konkretnych klas, użycie anonimowych implementacji
