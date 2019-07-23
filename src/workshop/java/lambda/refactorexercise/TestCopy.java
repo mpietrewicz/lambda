@@ -12,7 +12,7 @@ public class TestCopy {
     public static void main(String[] args) throws IOException {
         File source = new File("source.txt");
         File target = new File("target.txt");
-        System.out.println(BeforeRefactor.fileCopyTime(source, target));
+        System.out.println(BeforeRefactor.fileCopyTime(source, target, new copyImplementation()));
 
     }
 
@@ -20,14 +20,10 @@ public class TestCopy {
 
 
 class BeforeRefactor {
-    public static double fileCopyTime(File source, File target)
+    public static double fileCopyTime(File source, File target, copyInterface copyInterface)
             throws IOException {
         long start = System.nanoTime();
-        try (FileInputStream in = new FileInputStream(source);
-             FileOutputStream out = new FileOutputStream(target)) { int anotherByte;
-            while ((anotherByte = in.read()) != -1) {
-                out.write(anotherByte); }
-        }
+        copyInterface.copy(source, target);
         long stop = System.nanoTime();
         return (stop - start) / 1e6; // czas w ms
     }
@@ -40,6 +36,23 @@ class BeforeRefactor {
     Poszczególne implementory, zawierają różną logikę kopiowania - zaprezentowana i
     Files.copy(source.toPath(), target.toPath())
   */
+
+interface copyInterface {
+    void copy(File source, File target) throws IOException;
+}
+
+class copyImplementation implements copyInterface {
+
+    @Override
+    public void copy(File source, File target) throws IOException {
+        try (FileInputStream in = new FileInputStream(source);
+             FileOutputStream out = new FileOutputStream(target)) { int anotherByte;
+            while ((anotherByte = in.read()) != -1) {
+                out.write(anotherByte); }
+        }
+    }
+
+}
 
 
 /*
