@@ -4,6 +4,14 @@ public class Main {
 
     public static void main(String[] args) {
         useMyInterface(new MyImplementation(), 10);
+
+        // TODO 2 anoniomowa implementacja
+        useMyInterface(new MyInterface() {
+            @Override
+            public void go(int i) {
+                System.out.printf("Anonimowa implementacja, wartość i: %d%n", i);
+            }
+        }, 44);
     }
 
     static void useMyInterface(MyInterface myInterface, int i) {
