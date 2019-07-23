@@ -12,7 +12,13 @@ public class Main {
                 System.out.printf("Anonimowa implementacja, wartość i: %d%n", i);
             }
         }, 44);
+
+        // TODO 3 lambda
+        useMyInterface(inter -> System.out.printf("Lambda, wartość i: %d%n", inter), 99);
+
     }
+
+
 
     static void useMyInterface(MyInterface myInterface, int i) {
         myInterface.go(i);
